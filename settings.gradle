@@ -1,0 +1,8 @@
+rootProject.name = 'chat'
+include 'server'
+findProject(':server')?.name = 'server'
+include 'client'
+findProject(':client')?.name = 'client'
+include 'common'
+findProject(':common')?.name = 'common'
+
