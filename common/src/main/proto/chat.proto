@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "atafelska.chat";
+option java_outer_classname = "ChatProto";
+
+package chat;
+
+message User {
+    string name = 1;
+}
+
+message Message {
+    User user = 1;
+    string text = 2;
+}
+
+message Chat {
+    repeated Message messages = 1;
+}
+
+message CurrentUsers {
+    repeated User users = 1;
+}
+
+service ChatService {
+    rpc getChat(User) returns (Chat);
+    rpc unsubscribe(User) returns (User);
+    rpc observeMessages(User) returns (stream Message);
+    rpc observeUsers(User) returns (stream CurrentUsers);
+}
