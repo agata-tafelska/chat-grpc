@@ -1,12 +1,36 @@
-plugins {
-    id 'java'
-}
+apply plugin: 'java'
+apply plugin: 'javafx-gradle-plugin'
+apply plugin: 'application'
 
 group 'chat-client'
 version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
 
+
+jfx {
+    mainClass = 'atafelska.chat.client.ClientApplication'
+    vendor = 'Agata Tafelska'
+}
+
+application {
+    mainClassName = "atafelska.chat.client.ClientApplication"
+}
+
+buildscript {
+    dependencies {
+        classpath group: 'de.dynamicfiles.projects.gradle.plugins', name: 'javafx-gradle-plugin', version: '8.8.2'
+    }
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+}
+
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    implementation project(":common")
+    implementation 'io.grpc:grpc-netty-shaded:1.25.0'
+    implementation 'io.grpc:grpc-protobuf:1.25.0'
+    implementation 'io.grpc:grpc-stub:1.25.0'
 }
