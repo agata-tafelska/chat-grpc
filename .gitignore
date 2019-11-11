@@ -1,3 +1,5 @@
 /build
 .gradle
 /.idea/caches/*
+/.idea/compiler.xml
+/.idea/uiDesigner.xml
