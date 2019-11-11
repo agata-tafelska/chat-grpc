@@ -26,6 +26,7 @@ message CurrentUsers {
 service ChatService {
     rpc getChat(User) returns (Chat);
     rpc unsubscribe(User) returns (User);
+    rpc sendMessage(Message) returns (Message);
     rpc observeMessages(User) returns (stream Message);
     rpc observeUsers(User) returns (stream CurrentUsers);
 }
