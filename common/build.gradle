@@ -36,3 +36,5 @@ protobuf {
         }
     }
 }
+
+clean.finalizedBy("generateProto")
