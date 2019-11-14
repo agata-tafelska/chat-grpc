@@ -1,6 +1,5 @@
-package atafelska.chat.client.entry;
+package atafelska.chat.client.controllers;
 
-import atafelska.chat.client.core.BaseController;
 import atafelska.chat.client.core.Logger;
 import atafelska.chat.client.utils.InputUtils;
 import javafx.fxml.FXML;

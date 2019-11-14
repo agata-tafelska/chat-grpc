@@ -1,4 +1,6 @@
-package atafelska.chat.client.core;
+package atafelska.chat.client.controllers;
+
+import atafelska.chat.client.core.SceneCoordinator;
 
 public abstract class BaseController {
     protected SceneCoordinator sceneCoordinator;

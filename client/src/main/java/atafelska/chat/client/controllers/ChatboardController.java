@@ -1,6 +1,5 @@
-package atafelska.chat.client.chatboard;
+package atafelska.chat.client.controllers;
 
-import atafelska.chat.client.core.BaseController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
