@@ -1,5 +1,6 @@
 package atafelska.chat.client.core;
 
+import atafelska.chat.client.controllers.BaseController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -10,7 +11,9 @@ public class SceneFactory {
 
     public enum SceneType {
         ENTRY,
-        CHATBOARD
+        CHATBOARD,
+        LOADING,
+        ERROR
     }
 
     public static Scene getScene(SceneType type, SceneConfiguration configuration, SceneCoordinator coordinator) {
@@ -22,6 +25,11 @@ public class SceneFactory {
             case CHATBOARD:
                 sceneResource = "chatboard.fxml";
                 break;
+            case LOADING:
+                sceneResource = "loading.fxml";
+                break;
+            case ERROR:
+                sceneResource = "error.fxml";
             default:
                 throw new IllegalArgumentException("There is no resource for given scene type: "+ type);
         }
@@ -33,7 +41,9 @@ public class SceneFactory {
             Parent parent = resourceLoader.load();
 
             // Set SceneCoordinator to controller
-            ((BaseController) resourceLoader.getController()).setSceneCoordinator(coordinator);
+            if (resourceLoader.getController() instanceof BaseController) {
+                ((BaseController) resourceLoader.getController()).setSceneCoordinator(coordinator);
+            }
 
             return new Scene(parent, configuration.getWidth(), configuration.getHeight());
         } catch (IOException exception) {

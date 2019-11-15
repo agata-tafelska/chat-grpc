@@ -15,6 +15,7 @@ public class SceneCoordinator {
 
     private Stage stage;
     private ChatService chatService = null;
+    private String errorMessage = "";
 
     public SceneCoordinator(Stage stage) {
         this.stage = stage;
@@ -27,6 +28,7 @@ public class SceneCoordinator {
     }
 
     public void joinChat(String host, String username) {
+        showLoading();
         chatService = new ChatService(host);
         chatService.getChat(User.newBuilder().setName(username).build(), new StreamObserver<Chat>() {
             @Override
@@ -54,7 +56,7 @@ public class SceneCoordinator {
     }
 
     private void showLoading() {
-
+        stage.setScene(SceneFactory.getScene(SceneFactory.SceneType.LOADING, defaultSceneConfiguration, this));
     }
 
     private void showError(String errorMessage) {
