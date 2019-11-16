@@ -55,16 +55,19 @@ public class ChatServerService extends ChatServiceGrpc.ChatServiceImplBase {
 
     @Override
     public void observeUsers(User request, StreamObserver<CurrentUsers> responseObserver) {
+        Logger.print("User: " + request.getName() + " starting observing users");
         observers.get(request).usersObserver = responseObserver;
     }
 
     @Override
     public void observeMessages(User request, StreamObserver<Message> responseObserver) {
+        Logger.print("User: " + request.getName() + " starting observing messages");
         observers.get(request).messageObserver = responseObserver;
     }
 
     @Override
     public void sendMessage(Message request, StreamObserver<Message> responseObserver) {
+        Logger.print("**Message** " + request.getUser().getName() + ":[" + request.getText() + "]");
         chatStorage.addMessage(request);
         observers.forEach(
                 (user, chatObserver) -> {
