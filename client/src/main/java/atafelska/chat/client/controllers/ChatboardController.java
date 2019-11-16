@@ -3,6 +3,7 @@ package atafelska.chat.client.controllers;
 import atafelska.chat.Message;
 import atafelska.chat.User;
 import atafelska.chat.client.core.Logger;
+import atafelska.chat.client.utils.InputUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -43,8 +44,14 @@ public class ChatboardController extends BaseController {
     @Override
     public void onLoaded() {
         super.onLoaded();
+        initButtons();
+
         Logger.print("Starting observing chat");
         sceneCoordinator.observeChat(usersObserver, messagesObserver);
+    }
+
+    private void initButtons() {
+        buttonSend.setOnAction(actionEvent -> sendMessage());
     }
 
     private void updateUsers(List<User> users) {
@@ -59,5 +66,22 @@ public class ChatboardController extends BaseController {
         messages.forEach(
                 message -> Logger.print(message.toString())
         );
+    }
+
+    private void sendMessage() {
+        String message = editTextMessage.getText();
+
+        if (!InputUtils.isMessageValid(message)) {
+            Logger.print("Invalid message entered: " + message + ", returning");
+            showInvalidMessageError();
+            return;
+        }
+
+        Logger.print("Sending message: " + message);
+        sceneCoordinator.sendMessage(message);
+    }
+
+    private void showInvalidMessageError() {
+        // TODO Find nice way to show error, search for JavaFX standards
     }
 }

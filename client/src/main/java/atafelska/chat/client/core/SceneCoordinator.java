@@ -23,6 +23,7 @@ public class SceneCoordinator {
 
     private Stage stage;
     private ChatService chatService = null;
+    private User currentUser = null;
     private String errorMessage = "";
 
     private MessageObservable messagesObservable = new MessageObservable();
@@ -53,8 +54,8 @@ public class SceneCoordinator {
     public void joinChat(String host, String username) {
         showLoading();
         chatService = new ChatService(host);
-        User user = User.newBuilder().setName(username).build();
-        chatService.getChat(user, new StreamObserver<Chat>() {
+        currentUser = User.newBuilder().setName(username).build();
+        chatService.getChat(currentUser, new StreamObserver<Chat>() {
             @Override
             public void onNext(Chat value) {
                 Logger.print("Chat received, updating values of UsersObservable and MessagesObservable");
@@ -62,8 +63,8 @@ public class SceneCoordinator {
                 usersObservable.updateUsers(value.getUserList());
                 showChat();
 
-                chatService.observeUsers(user, usersStreamObserver);
-                chatService.observeMessages(user, messageStreamObserver);
+                chatService.observeUsers(currentUser, usersStreamObserver);
+                chatService.observeMessages(currentUser, messageStreamObserver);
             }
 
             @Override
@@ -84,6 +85,33 @@ public class SceneCoordinator {
 
         usersObservable.notifyObservers();
         messagesObservable.notifyObservers();
+    }
+
+    public void sendMessage(String text) {
+        Message message =
+                Message.newBuilder()
+                        .setUser(currentUser)
+                        .setText(text)
+                        .build();
+
+        chatService.sendMessage(message, new StreamObserver<Message>() {
+            @Override
+            public void onNext(Message value) {
+                // Do nothing
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                Logger.print("Unable to send message. Reason: " + t.getMessage());
+                t.printStackTrace();
+            }
+
+            @Override
+            public void onCompleted() {
+                // Do nothing
+            }
+        });
+
     }
 
     private void showChat() {

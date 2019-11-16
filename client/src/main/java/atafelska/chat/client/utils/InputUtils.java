@@ -11,4 +11,9 @@ public class InputUtils {
         // TODO
         return !username.isEmpty();
     }
+
+    public static boolean isMessageValid(String text) {
+        // TODO
+        return !text.isEmpty();
+    }
 }
