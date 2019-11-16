@@ -1,10 +1,13 @@
 package atafelska.chat.client.core;
 
 import atafelska.chat.Chat;
+import atafelska.chat.CurrentUsers;
+import atafelska.chat.Message;
 import atafelska.chat.User;
 import atafelska.chat.client.data.MessageObservable;
 import atafelska.chat.client.data.UsersObservable;
 import atafelska.chat.client.net.ChatService;
+import atafelska.chat.client.net.DefaultStreamObserver;
 import atafelska.chat.client.utils.ErrorUtils;
 import io.grpc.stub.StreamObserver;
 import javafx.application.Platform;
@@ -23,6 +26,18 @@ public class SceneCoordinator {
 
     private MessageObservable messagesObservable = new MessageObservable();
     private UsersObservable usersObservable = new UsersObservable();
+    private StreamObserver<CurrentUsers> usersStreamObserver = new DefaultStreamObserver<CurrentUsers>() {
+        @Override
+        public void onNext(CurrentUsers value) {
+            usersObservable.updateUsers(value.getUsersList());
+        }
+    };
+    private StreamObserver<Message> messageStreamObserver = new DefaultStreamObserver<Message>() {
+        @Override
+        public void onNext(Message value) {
+            messagesObservable.addMessage(value);
+        }
+    };
 
     public SceneCoordinator(Stage stage) {
         this.stage = stage;
@@ -45,6 +60,9 @@ public class SceneCoordinator {
                 messagesObservable.setMessages(value.getMessagesList());
                 usersObservable.updateUsers(value.getUserList());
                 showChat();
+
+                chatService.observeUsers(user, usersStreamObserver);
+                chatService.observeMessages(user, messageStreamObserver);
             }
 
             @Override
