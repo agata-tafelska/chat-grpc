@@ -20,7 +20,12 @@ public class ChatServerService extends ChatServiceGrpc.ChatServiceImplBase {
     public void getChat(User request, StreamObserver<Chat> responseObserver) {
         Logger.print("User: " + request + " joined chat");
         observers.put(request, new ChatObserver());
-        responseObserver.onNext(Chat.newBuilder().addAllMessages(chatStorage.getMessages()).build());
+        responseObserver.onNext(
+                Chat.newBuilder()
+                        .addAllUser(observers.keySet())
+                        .addAllMessages(chatStorage.getMessages())
+                        .build()
+        );
         responseObserver.onCompleted();
 
         updateCurrentUsers();
@@ -50,9 +55,7 @@ public class ChatServerService extends ChatServiceGrpc.ChatServiceImplBase {
 
     @Override
     public void observeUsers(User request, StreamObserver<CurrentUsers> responseObserver) {
-        CurrentUsers currentUsers = CurrentUsers.newBuilder().addAllUsers(observers.keySet()).build();
         observers.get(request).usersObserver = responseObserver;
-        observers.get(request).usersObserver.onNext(currentUsers);
     }
 
     @Override

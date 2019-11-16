@@ -17,6 +17,7 @@ message Message {
 
 message Chat {
     repeated Message messages = 1;
+    repeated User user = 2;
 }
 
 message CurrentUsers {
