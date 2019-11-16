@@ -21,18 +21,18 @@
          </left>
       </BorderPane>
    </bottom>
-   <center>
-      <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <content>
-            <VBox fx:id="listMessages" prefHeight="200.0" prefWidth="100.0" />
-         </content>
-      </ScrollPane>
-   </center>
    <left>
       <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <content>
-            <VBox fx:id="listUsers" prefHeight="200.0" prefWidth="100.0" />
+            <ListView fx:id="usersListView" prefHeight="200.0" prefWidth="200.0" />
          </content>
       </ScrollPane>
    </left>
+   <center>
+      <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <ListView fx:id="messagesListView" />
+         </children>
+      </Pane>
+   </center>
 </BorderPane>
