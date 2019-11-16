@@ -2,13 +2,13 @@ package atafelska.chat.client.data;
 
 import atafelska.chat.Message;
 
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Observable;
 
 public class MessageObservable extends Observable {
-    private List<Message> messages;
+    private ArrayList<Message> messages;
 
-    public void setMessages(List<Message> messages) {
+    public void setMessages(ArrayList<Message> messages) {
         this.messages = messages;
         notifyObservers();
     }

@@ -13,6 +13,7 @@ import io.grpc.stub.StreamObserver;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.Observer;
 
 import static atafelska.chat.client.TextConstants.TITLE_CHAT;
@@ -57,7 +58,7 @@ public class SceneCoordinator {
             @Override
             public void onNext(Chat value) {
                 Logger.print("Chat received, updating values of UsersObservable and MessagesObservable");
-                messagesObservable.setMessages(value.getMessagesList());
+                messagesObservable.setMessages(new ArrayList<>(value.getMessagesList()));
                 usersObservable.updateUsers(value.getUserList());
                 showChat();
 
