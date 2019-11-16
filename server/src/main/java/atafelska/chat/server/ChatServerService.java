@@ -2,6 +2,7 @@ package atafelska.chat.server;
 
 import atafelska.chat.*;
 import atafelska.chat.server.storage.ChatStorage;
+import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 
 import java.util.HashMap;
@@ -46,8 +47,12 @@ public class ChatServerService extends ChatServiceGrpc.ChatServiceImplBase {
         observers.forEach(
                 (user, chatObserver) -> {
                     if (chatObserver.usersObserver != null) {
-                        Logger.print("Sending current users to: " + user);
-                        chatObserver.usersObserver.onNext(currentUsers);
+                        try {
+                            Logger.print("Sending current users to: " + user);
+                            chatObserver.usersObserver.onNext(currentUsers);
+                        } catch (StatusRuntimeException exception) {
+                            Logger.print("Unable to send users updates to: " + user);
+                        }
                     }
                 }
         );
@@ -72,7 +77,12 @@ public class ChatServerService extends ChatServiceGrpc.ChatServiceImplBase {
         observers.forEach(
                 (user, chatObserver) -> {
                     if (chatObserver.messageObserver != null) {
-                        chatObserver.messageObserver.onNext(request);
+                        try {
+                            Logger.print("Sending message updates to: " + user);
+                            chatObserver.messageObserver.onNext(request);
+                        } catch (StatusRuntimeException exception) {
+                            Logger.print("Unable to send message updates to: " + user);
+                        }
                     }
                 }
         );
