@@ -42,7 +42,9 @@ public class SceneFactory {
 
             // Set SceneCoordinator to controller
             if (resourceLoader.getController() instanceof BaseController) {
-                ((BaseController) resourceLoader.getController()).setSceneCoordinator(coordinator);
+                BaseController controller = resourceLoader.getController();
+                controller.setSceneCoordinator(coordinator);
+                controller.onLoaded();
             }
 
             return new Scene(parent, configuration.getWidth(), configuration.getHeight());

@@ -8,4 +8,8 @@ public abstract class BaseController {
     public void setSceneCoordinator(SceneCoordinator sceneCoordinator) {
         this.sceneCoordinator = sceneCoordinator;
     }
+
+    public void onLoaded() {
+
+    }
 }
