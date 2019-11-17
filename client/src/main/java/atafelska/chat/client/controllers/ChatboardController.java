@@ -58,6 +58,7 @@ public class ChatboardController extends BaseController {
 
     private void initButtons() {
         buttonSend.setOnAction(actionEvent -> sendMessage());
+        buttonLogout.setOnAction(actionEvent -> sceneCoordinator.logout());
     }
 
     @SuppressWarnings("unchecked")

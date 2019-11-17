@@ -47,7 +47,7 @@ public class SceneCoordinator {
 
     public void initApplication() {
         stage.setTitle(TITLE_CHAT);
-        stage.setScene(SceneFactory.getScene(SceneFactory.SceneType.ENTRY, defaultSceneConfiguration, this));
+        showEntry();
         stage.show();
     }
 
@@ -112,6 +112,36 @@ public class SceneCoordinator {
             }
         });
 
+    }
+
+    public void logout() {
+        chatService.unsubscribe(currentUser, new StreamObserver<User>() {
+            @Override
+            public void onNext(User value) {
+                Logger.print("Logout performed successfully");
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                Logger.print("Error during logout. Reason: " + t.getMessage());
+            }
+
+            @Override
+            public void onCompleted() {
+                // Do nothing
+            }
+        });
+
+        currentUser = null;
+        chatService = null;
+        showEntry();
+    }
+
+    private void showEntry() {
+        Platform.runLater(() -> {
+            Logger.print("");
+            stage.setScene(SceneFactory.getScene(SceneFactory.SceneType.ENTRY, defaultSceneConfiguration, this));
+        });
     }
 
     private void showChat() {
