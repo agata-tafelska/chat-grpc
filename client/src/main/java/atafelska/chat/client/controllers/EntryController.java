@@ -3,7 +3,11 @@ package atafelska.chat.client.controllers;
 import atafelska.chat.client.core.Logger;
 import atafelska.chat.client.utils.InputUtils;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+
+import static atafelska.chat.client.TextConstants.INCORRECT_HOST_MESSAGE;
+import static atafelska.chat.client.TextConstants.INCORRECT_USERNAME_MESSAGE;
 
 public class EntryController extends BaseController {
 
@@ -11,6 +15,10 @@ public class EntryController extends BaseController {
     private TextField editTextHost;
     @FXML
     private TextField editTextUsername;
+    @FXML
+    private Label incorrectUsernameError;
+    @FXML
+    private Label incorrectHostError;
 
     public void onJoinButtonClicked() {
         String host = editTextHost.getText();
@@ -33,10 +41,12 @@ public class EntryController extends BaseController {
     }
 
     public void showInvalidHostError() {
-        // TODO Find nice way to show error, search for JavaFX standards
+        incorrectHostError.setText(INCORRECT_HOST_MESSAGE);
+        incorrectHostError.setVisible(true);
     }
 
     public void showInvalidUsernameError() {
-        // TODO Find nice way to show error, search for JavaFX standards
+        incorrectUsernameError.setText(INCORRECT_USERNAME_MESSAGE);
+        incorrectUsernameError.setVisible(true);
     }
 }
