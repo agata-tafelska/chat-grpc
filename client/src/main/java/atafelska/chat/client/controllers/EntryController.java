@@ -5,12 +5,16 @@ import atafelska.chat.client.utils.InputUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
 
 import static atafelska.chat.client.TextConstants.INCORRECT_HOST_MESSAGE;
 import static atafelska.chat.client.TextConstants.INCORRECT_USERNAME_MESSAGE;
 
 public class EntryController extends BaseController {
 
+    @FXML
+    private AnchorPane entryPane;
     @FXML
     private TextField editTextHost;
     @FXML
@@ -19,6 +23,16 @@ public class EntryController extends BaseController {
     private Label incorrectUsernameError;
     @FXML
     private Label incorrectHostError;
+
+    @Override
+    public void onLoaded() {
+        super.onLoaded();
+        entryPane.setOnKeyPressed(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.ENTER){
+                onJoinButtonClicked();
+            }
+        });
+    }
 
     public void onJoinButtonClicked() {
         String host = editTextHost.getText();
