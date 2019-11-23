@@ -108,6 +108,8 @@ public class ChatboardController extends BaseController {
 
         Logger.print("Sending message: " + message);
         sceneCoordinator.sendMessage(message);
+        editTextMessage.clear();
+        editTextMessage.requestFocus();
     }
 
     private void showInvalidMessageError() {
