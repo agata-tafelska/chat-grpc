@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.KeyCode;
 
 import java.util.List;
 import java.util.Observer;
@@ -57,6 +58,20 @@ public class ChatboardController extends BaseController {
     }
 
     private void initButtons() {
+        editTextMessage.setOnKeyPressed(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.ENTER && !keyEvent.isShiftDown()){
+                sendMessage();
+                return;
+            }
+            if (keyEvent.getCode() == KeyCode.ENTER){
+                editTextMessage.appendText("\n");
+            }
+        });
+        editTextMessage.setOnKeyReleased(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.ENTER && !keyEvent.isShiftDown()) {
+                editTextMessage.clear();
+            }
+        });
         buttonSend.setOnAction(actionEvent -> sendMessage());
         buttonLogout.setOnAction(actionEvent -> sceneCoordinator.logout());
     }
@@ -108,8 +123,6 @@ public class ChatboardController extends BaseController {
 
         Logger.print("Sending message: " + message);
         sceneCoordinator.sendMessage(message);
-        editTextMessage.clear();
-        editTextMessage.requestFocus();
     }
 
     private void showInvalidMessageError() {
