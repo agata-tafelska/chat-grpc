@@ -1,38 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="atafelska.chat.client.controllers.ChatboardController">
-   <top>
-      <Label text="Chat" BorderPane.alignment="CENTER" />
-   </top>
-   <bottom>
-      <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <center>
-            <TextArea fx:id="editTextMessage" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-         </center>
-         <right>
-            <Button fx:id="buttonSend" mnemonicParsing="false" text="Send" BorderPane.alignment="CENTER" />
-         </right>
-         <left>
-            <Button fx:id="buttonLogout" mnemonicParsing="false" text="Logout" BorderPane.alignment="CENTER" />
-         </left>
-      </BorderPane>
-   </bottom>
-   <left>
-      <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <content>
-            <ListView fx:id="usersListView" prefHeight="200.0" prefWidth="200.0" />
-         </content>
-      </ScrollPane>
-   </left>
-   <center>
-      <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="atafelska.chat.client.controllers.ChatboardController">
+   <children>
+      <Pane layoutX="15.0" prefHeight="550.0" prefWidth="775.0">
          <children>
-            <ListView fx:id="messagesListView" />
+            <ListView fx:id="messagesListView" focusTraversable="false" layoutY="1.0" maxWidth="775.0" prefHeight="550.0" prefWidth="775.0" />
          </children>
       </Pane>
-   </center>
-</BorderPane>
+      <Pane layoutX="809.0" prefHeight="690.0" prefWidth="200.0">
+         <children>
+            <ListView fx:id="usersListView" focusTraversable="false" layoutY="1.0" prefHeight="689.0" prefWidth="200.0" />
+         </children>
+      </Pane>
+      <Pane layoutX="15.0" layoutY="567.0" prefHeight="123.0" prefWidth="775.0">
+         <children>
+            <TextArea fx:id="editTextMessage" layoutY="-1.0" prefHeight="123.0" prefWidth="775.0" promptText="Type your message here..." styleClass="text-field" stylesheets="@style.css" wrapText="true" />
+         </children>
+      </Pane>
+      <Button fx:id="buttonLogout" layoutX="941.0" layoutY="697.0" mnemonicParsing="false" text="Logout" />
+      <Button fx:id="buttonSend" layoutX="674.0" layoutY="697.0" mnemonicParsing="false" text="Send message" />
+   </children>
+</AnchorPane>
