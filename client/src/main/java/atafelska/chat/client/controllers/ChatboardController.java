@@ -12,6 +12,11 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.List;
 import java.util.Observer;
 
@@ -100,7 +105,14 @@ public class ChatboardController extends BaseController {
         ObservableListBase observableListBase = new ObservableListBase() {
             @Override
             public Object get(int index) {
-                return messages.get(index).getUser().getName() + ": " + messages.get(index).getText();
+                Message message = messages.get(index);
+                LocalDateTime messageDateTime =
+                        LocalDateTime.ofInstant(Instant.ofEpochMilli(message.getTimestamp()), ZoneId.systemDefault());
+
+                String formattedMessageDateTime = messageDateTime.format(
+                        DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)
+                );
+                return "[" + formattedMessageDateTime + "] " + message.getUser().getName() + ": " + message.getText();
             }
 
             @Override

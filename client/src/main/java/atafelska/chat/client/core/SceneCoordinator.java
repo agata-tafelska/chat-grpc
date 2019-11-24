@@ -92,6 +92,7 @@ public class SceneCoordinator {
                 Message.newBuilder()
                         .setUser(currentUser)
                         .setText(text)
+                        .setTimestamp(System.currentTimeMillis())
                         .build();
 
         chatService.sendMessage(message, new StreamObserver<Message>() {

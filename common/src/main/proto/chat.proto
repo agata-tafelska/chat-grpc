@@ -13,6 +13,7 @@ message User {
 message Message {
     User user = 1;
     string text = 2;
+    int64 timestamp = 3;
 }
 
 message Chat {
