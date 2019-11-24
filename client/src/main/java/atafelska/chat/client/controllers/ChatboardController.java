@@ -122,6 +122,7 @@ public class ChatboardController extends BaseController {
         };
 
         messagesListView.setItems(observableListBase);
+        messagesListView.scrollTo(messages.size() - 1);
     }
 
     private void sendMessage() {
