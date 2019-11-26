@@ -12,8 +12,7 @@ public class SceneFactory {
     public enum SceneType {
         ENTRY,
         CHATBOARD,
-        LOADING,
-        ERROR
+        LOADING
     }
 
     public static Scene getScene(SceneType type, SceneConfiguration configuration, SceneCoordinator coordinator) {
@@ -28,8 +27,6 @@ public class SceneFactory {
             case LOADING:
                 sceneResource = "loading.fxml";
                 break;
-            case ERROR:
-                sceneResource = "error.fxml";
             default:
                 throw new IllegalArgumentException("There is no resource for given scene type: "+ type);
         }

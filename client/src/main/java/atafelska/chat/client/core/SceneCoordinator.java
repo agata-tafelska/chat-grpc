@@ -24,7 +24,6 @@ public class SceneCoordinator {
     private Stage stage;
     private ChatService chatService = null;
     private User currentUser = null;
-    private String errorMessage = "";
 
     private MessageObservable messagesObservable = new MessageObservable();
     private UsersObservable usersObservable = new UsersObservable();
