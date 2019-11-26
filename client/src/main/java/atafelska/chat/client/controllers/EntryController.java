@@ -8,8 +8,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 
+import java.util.Map;
+
 import static atafelska.chat.client.TextConstants.INCORRECT_HOST_MESSAGE;
 import static atafelska.chat.client.TextConstants.INCORRECT_USERNAME_MESSAGE;
+import static atafelska.chat.client.core.SceneCoordinator.*;
 
 public class EntryController extends BaseController {
 
@@ -32,6 +35,30 @@ public class EntryController extends BaseController {
                 onJoinButtonClicked();
             }
         });
+    }
+
+    @Override
+    public void onOptionalParamsLoaded(Map<String, String> optionalParams) {
+        super.onOptionalParamsLoaded(optionalParams);
+        if (optionalParams == null) return;
+
+        if (optionalParams.containsKey(OPTION_PARAM_USERNAME_ERROR)) {
+            incorrectUsernameError.setText(optionalParams.get(OPTION_PARAM_USERNAME_ERROR));
+            incorrectUsernameError.setVisible(true);
+        }
+
+        if (optionalParams.containsKey(OPTION_PARAM_HOST_ERROR)) {
+            incorrectHostError.setText(optionalParams.get(OPTION_PARAM_HOST_ERROR));
+            incorrectHostError.setVisible(true);
+        }
+
+        if (optionalParams.containsKey(OPTION_PARAM_HOST)) {
+            editTextHost.setText(optionalParams.get(OPTION_PARAM_HOST));
+        }
+
+        if (optionalParams.containsKey(OPTION_PARAM_USERNAME)) {
+            editTextUsername.setText(optionalParams.get(OPTION_PARAM_USERNAME));
+        }
     }
 
     public void onJoinButtonClicked() {
