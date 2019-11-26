@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
@@ -7,12 +8,7 @@
 
 <AnchorPane fx:id="entryPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="atafelska.chat.client.controllers.EntryController">
    <children>
-      <Label layoutX="488.0" layoutY="57.0" text="Chat">
-         <font>
-            <Font size="24.0" />
-         </font>
-      </Label>
-      <VBox layoutX="222.0" layoutY="148.0" prefHeight="140.0" prefWidth="581.0">
+      <VBox layoutX="222.0" layoutY="314.0" prefHeight="140.0" prefWidth="581.0">
          <children>
             <TextField fx:id="editTextHost" promptText="Host" styleClass="text.field" stylesheets="@style.css" />
             <Label fx:id="incorrectHostError" prefHeight="30.0" prefWidth="582.0" text="Label" textFill="#f50000" visible="false" />
@@ -20,10 +16,15 @@
             <Label fx:id="incorrectUsernameError" prefHeight="44.0" prefWidth="581.0" text="Label" textFill="#f50000" visible="false" />
          </children>
       </VBox>
-      <Button fx:id="buttonJoin" layoutX="467.0" layoutY="288.0" mnemonicParsing="false" onAction="#onJoinButtonClicked" text="Join chat">
+      <Button fx:id="buttonJoin" layoutX="459.0" layoutY="441.0" mnemonicParsing="false" onAction="#onJoinButtonClicked" prefHeight="38.0" prefWidth="108.0" text="Join chat">
          <font>
             <Font size="17.0" />
          </font>
       </Button>
+      <ImageView fx:id="logo" fitHeight="215.0" fitWidth="233.0" layoutX="405.0" layoutY="99.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@ATChatLogo.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>
