@@ -5,7 +5,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.Map;
 
 public class SceneFactory {
 
@@ -15,7 +17,16 @@ public class SceneFactory {
         LOADING
     }
 
-    public static Scene getScene(SceneType type, SceneConfiguration configuration, SceneCoordinator coordinator) {
+    public static Scene getScene(SceneType type,
+                                 SceneConfiguration configuration,
+                                 SceneCoordinator coordinator) {
+        return getScene(type, configuration, coordinator, null);
+    }
+
+    public static Scene getScene(SceneType type,
+                                 SceneConfiguration configuration,
+                                 SceneCoordinator coordinator,
+                                 @Nullable Map<String, String> optionalParams) {
         String sceneResource;
         switch (type) {
             case ENTRY:
@@ -28,7 +39,7 @@ public class SceneFactory {
                 sceneResource = "loading.fxml";
                 break;
             default:
-                throw new IllegalArgumentException("There is no resource for given scene type: "+ type);
+                throw new IllegalArgumentException("There is no resource for given scene type: " + type);
         }
 
         Logger.print("Loading scene from resource: " + sceneResource);
@@ -42,6 +53,7 @@ public class SceneFactory {
                 BaseController controller = resourceLoader.getController();
                 controller.setSceneCoordinator(coordinator);
                 controller.onLoaded();
+                controller.onOptionalParamsLoaded(optionalParams);
             }
 
             return new Scene(parent, configuration.getWidth(), configuration.getHeight());
