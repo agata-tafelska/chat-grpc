@@ -2,6 +2,7 @@ package atafelska.chat.server;
 
 import atafelska.chat.*;
 import atafelska.chat.server.storage.ChatStorage;
+import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 
@@ -20,6 +21,11 @@ public class ChatServerService extends ChatServiceGrpc.ChatServiceImplBase {
     @Override
     public void getChat(User request, StreamObserver<Chat> responseObserver) {
         Logger.print("User: " + request + " joined chat");
+        if (observers.containsKey(request)) {
+            responseObserver.onError(Status.ALREADY_EXISTS.asRuntimeException());
+            Logger.print("User with name: " + request.getName() + " already exists. Returning `ALREADY_EXISTS` error.");
+            return;
+        }
         observers.put(request, new ChatObserver());
         responseObserver.onNext(
                 Chat.newBuilder()

@@ -8,17 +8,23 @@ import atafelska.chat.client.data.MessageObservable;
 import atafelska.chat.client.data.UsersObservable;
 import atafelska.chat.client.net.ChatService;
 import atafelska.chat.client.net.DefaultStreamObserver;
-import atafelska.chat.client.utils.ErrorUtils;
+import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Observer;
 
-import static atafelska.chat.client.TextConstants.TITLE_CHAT;
+import static atafelska.chat.client.TextConstants.*;
 
 public class SceneCoordinator {
+    public static final String OPTION_PARAM_HOST_ERROR = "host_error_message";
+    public static final String OPTION_PARAM_USERNAME_ERROR = "username_error_message";
+    public static final String OPTION_PARAM_HOST = "host";
+    public static final String OPTION_PARAM_USERNAME = "username";
     private SceneConfiguration defaultSceneConfiguration = new SceneConfiguration(1024, 768);
 
     private Stage stage;
@@ -67,8 +73,27 @@ public class SceneCoordinator {
             }
 
             @Override
-            public void onError(Throwable t) {
-                showError(ErrorUtils.getErrorMessage(t));
+            public void onError(Throwable throwable) {
+                Map<String, String> params = new HashMap<>();
+                params.put(OPTION_PARAM_HOST, host);
+                params.put(OPTION_PARAM_USERNAME, username);
+
+                if (throwable instanceof StatusRuntimeException) {
+                    StatusRuntimeException exception = (StatusRuntimeException) throwable;
+                    switch (exception.getStatus().getCode()) {
+                        case UNAVAILABLE:
+                            params.put(OPTION_PARAM_HOST_ERROR, ERROR_SERVICE_UNAVAILABLE);
+                            showError(params);
+                            return;
+                        case ALREADY_EXISTS:
+                            params.put(OPTION_PARAM_USERNAME_ERROR, ERROR_DUPLICATED_USER);
+                            showError(params);
+                            return;
+                    }
+                }
+
+                params.put(OPTION_PARAM_USERNAME_ERROR, ERROR_UNKNOWN);
+                showError(params);
             }
 
             @Override
@@ -155,7 +180,11 @@ public class SceneCoordinator {
         stage.setScene(SceneFactory.getScene(SceneFactory.SceneType.LOADING, defaultSceneConfiguration, this));
     }
 
-    private void showError(String errorMessage) {
-
+    private void showError(Map<String, String> optionalParams) {
+        Platform.runLater(() -> {
+            Logger.print("");
+            stage.setScene(SceneFactory.getScene(SceneFactory.SceneType.ENTRY, defaultSceneConfiguration, this, optionalParams));
+        });
+        Logger.print("Show error");
     }
 }
