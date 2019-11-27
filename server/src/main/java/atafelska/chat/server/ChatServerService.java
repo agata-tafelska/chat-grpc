@@ -6,7 +6,9 @@ import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ChatServerService extends ChatServiceGrpc.ChatServiceImplBase {
@@ -16,6 +18,21 @@ public class ChatServerService extends ChatServiceGrpc.ChatServiceImplBase {
 
     ChatServerService(ChatStorage chatStorage) {
         this.chatStorage = chatStorage;
+        initializeUsersConnectionPoller();
+    }
+
+    private void initializeUsersConnectionPoller() {
+        new Thread(() -> {
+            Logger.print("Starting users connection polling");
+            while (true) {
+                try {
+                    Thread.sleep(1000);
+                    updateCurrentUsers();
+                } catch (InterruptedException exception) {
+                    exception.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     @Override
@@ -50,6 +67,7 @@ public class ChatServerService extends ChatServiceGrpc.ChatServiceImplBase {
 
     private void updateCurrentUsers() {
         CurrentUsers currentUsers = CurrentUsers.newBuilder().addAllUsers(observers.keySet()).build();
+        List<User> disconnectedUsers = new ArrayList<>();
         observers.forEach(
                 (user, chatObserver) -> {
                     if (chatObserver.usersObserver != null) {
@@ -58,10 +76,12 @@ public class ChatServerService extends ChatServiceGrpc.ChatServiceImplBase {
                             chatObserver.usersObserver.onNext(currentUsers);
                         } catch (StatusRuntimeException exception) {
                             Logger.print("Unable to send users updates to: " + user);
+                            disconnectedUsers.add(user);
                         }
                     }
                 }
         );
+        disconnectedUsers.forEach(user -> observers.remove(user));
     }
 
     @Override
@@ -80,6 +100,8 @@ public class ChatServerService extends ChatServiceGrpc.ChatServiceImplBase {
     public void sendMessage(Message request, StreamObserver<Message> responseObserver) {
         Logger.print("**Message** " + request.getUser().getName() + ":[" + request.getText() + "]");
         chatStorage.addMessage(request);
+
+        List<User> disconnectedUsers = new ArrayList<>();
         observers.forEach(
                 (user, chatObserver) -> {
                     if (chatObserver.messageObserver != null) {
@@ -88,10 +110,12 @@ public class ChatServerService extends ChatServiceGrpc.ChatServiceImplBase {
                             chatObserver.messageObserver.onNext(request);
                         } catch (StatusRuntimeException exception) {
                             Logger.print("Unable to send message updates to: " + user);
+                            disconnectedUsers.add(user);
                         }
                     }
                 }
         );
+        disconnectedUsers.forEach(user -> observers.remove(user));
     }
 
     private static class ChatObserver {
