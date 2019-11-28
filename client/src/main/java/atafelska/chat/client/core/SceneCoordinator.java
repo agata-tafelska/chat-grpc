@@ -13,6 +13,7 @@ import io.grpc.stub.StreamObserver;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -74,26 +75,18 @@ public class SceneCoordinator {
 
             @Override
             public void onError(Throwable throwable) {
-                Map<String, String> params = new HashMap<>();
-                params.put(OPTION_PARAM_HOST, host);
-                params.put(OPTION_PARAM_USERNAME, username);
-
                 if (throwable instanceof StatusRuntimeException) {
                     StatusRuntimeException exception = (StatusRuntimeException) throwable;
                     switch (exception.getStatus().getCode()) {
                         case UNAVAILABLE:
-                            params.put(OPTION_PARAM_HOST_ERROR, ERROR_SERVICE_UNAVAILABLE);
-                            showError(params);
+                            showError(ERROR_SERVICE_UNAVAILABLE, null);
                             return;
                         case ALREADY_EXISTS:
-                            params.put(OPTION_PARAM_USERNAME_ERROR, ERROR_DUPLICATED_USER);
-                            showError(params);
+                            showError(null, ERROR_DUPLICATED_USER);
                             return;
                     }
                 }
-
-                params.put(OPTION_PARAM_USERNAME_ERROR, ERROR_UNKNOWN);
-                showError(params);
+                showError(null, ERROR_UNKNOWN);
             }
 
             @Override
@@ -126,9 +119,9 @@ public class SceneCoordinator {
             }
 
             @Override
-            public void onError(Throwable t) {
-                Logger.print("Unable to send message. Reason: " + t.getMessage());
-                t.printStackTrace();
+            public void onError(Throwable throwable) {
+                Logger.print("Unable to send message. Reason: " + throwable.getMessage());
+                showError(null, ERROR_CONNECTION_LOST);
             }
 
             @Override
@@ -180,11 +173,22 @@ public class SceneCoordinator {
         stage.setScene(SceneFactory.getScene(SceneFactory.SceneType.LOADING, defaultSceneConfiguration, this));
     }
 
-    private void showError(Map<String, String> optionalParams) {
+    private void showError(@Nullable String hostErrorMessage, @Nullable String usernameErrorMessage) {
+        Map<String, String> params = new HashMap<>();
+        params.put(OPTION_PARAM_HOST, chatService.getHost());
+        params.put(OPTION_PARAM_USERNAME, currentUser.getName());
+
+        if (hostErrorMessage != null) {
+            params.put(OPTION_PARAM_HOST_ERROR, hostErrorMessage);
+        }
+
+        if (usernameErrorMessage != null) {
+            params.put(OPTION_PARAM_USERNAME_ERROR, usernameErrorMessage);
+        }
+
         Platform.runLater(() -> {
             Logger.print("");
-            stage.setScene(SceneFactory.getScene(SceneFactory.SceneType.ENTRY, defaultSceneConfiguration, this, optionalParams));
+            stage.setScene(SceneFactory.getScene(SceneFactory.SceneType.ENTRY, defaultSceneConfiguration, this, params));
         });
-        Logger.print("Show error");
     }
 }

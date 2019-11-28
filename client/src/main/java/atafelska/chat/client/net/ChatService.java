@@ -8,13 +8,17 @@ public class ChatService {
     private static final int PORT = 9000;
 
     private ChatServiceGrpc.ChatServiceStub asyncStub;
+    private String host;
 
     public ChatService(String host) {
-        this(ManagedChannelBuilder.forAddress(host, PORT).usePlaintext());
+        this.host = host;
+        this.asyncStub = ChatServiceGrpc.newStub(
+                ManagedChannelBuilder.forAddress(host, PORT).usePlaintext().build()
+        );
     }
 
-    private ChatService(ManagedChannelBuilder channelBuilder) {
-        asyncStub = ChatServiceGrpc.newStub(channelBuilder.build());
+    public String getHost() {
+        return host;
     }
 
     public void getChat(User request, StreamObserver<Chat> responseObserver) {
