@@ -8,16 +8,14 @@ import atafelska.chat.client.data.MessageObservable;
 import atafelska.chat.client.data.UsersObservable;
 import atafelska.chat.client.net.ChatService;
 import atafelska.chat.client.net.DefaultStreamObserver;
+import atafelska.chat.client.net.DelayedTask;
 import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Observer;
+import java.util.*;
 
 import static atafelska.chat.client.TextConstants.*;
 
@@ -32,11 +30,21 @@ public class SceneCoordinator {
     private ChatService chatService = null;
     private User currentUser = null;
 
+    private DelayedTask connectionLostDelayedTask = new DelayedTask(() -> {
+        showError(null, ERROR_CONNECTION_LOST);
+    });
+
     private MessageObservable messagesObservable = new MessageObservable();
     private UsersObservable usersObservable = new UsersObservable();
     private StreamObserver<CurrentUsers> usersStreamObserver = new DefaultStreamObserver<CurrentUsers>() {
         @Override
         public void onNext(CurrentUsers value) {
+            /*
+             Set connection lost countdown to 5 seconds
+             Client expects next update in no more that this time
+             In case of timeout, lost connection error will be shown
+             */
+            connectionLostDelayedTask.delayExecution(5);
             usersObservable.updateUsers(value.getUsersList());
         }
     };
@@ -71,6 +79,8 @@ public class SceneCoordinator {
 
                 chatService.observeUsers(currentUser, usersStreamObserver);
                 chatService.observeMessages(currentUser, messageStreamObserver);
+
+                connectionLostDelayedTask.initialize();
             }
 
             @Override
@@ -150,6 +160,7 @@ public class SceneCoordinator {
             }
         });
 
+        connectionLostDelayedTask.cancel();
         currentUser = null;
         chatService = null;
         showEntry();
