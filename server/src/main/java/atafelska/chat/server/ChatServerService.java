@@ -78,6 +78,10 @@ public class ChatServerService extends ChatServiceGrpc.ChatServiceImplBase {
 
     @Override
     public void sendMessage(Message request, StreamObserver<Message> responseObserver) {
+        if (request.getText().equals("clear")) {
+            chatStorage.clearChat();
+            Logger.print("Message equals 'clear'");
+        }
         Logger.print("**Message** " + request.getUser().getName() + ":[" + request.getText() + "]");
         chatStorage.addMessage(request);
         observers.forEach(

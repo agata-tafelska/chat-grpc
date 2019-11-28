@@ -82,7 +82,15 @@ public class FileChatStorage implements ChatStorage {
 
     @Override
     public void clearChat() {
-        Logger.print("Clearing chat history");
+        Logger.print("Clearing chat history file");
+        try {
+            FileWriter writer = new FileWriter(chatHistoryFile);
+            writer.append("");
+            writer.close();
+        } catch (IOException exception) {
+            Logger.print("Unable to clear chat history file.");
+            exception.printStackTrace();
+        }
     }
 
     private void saveMessageToFile(Message message) {
