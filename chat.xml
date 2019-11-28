@@ -255,26 +255,37 @@
   <target name="compile.module.chat" depends="compile.module.chat.production,compile.module.chat.tests" description="Compile module chat">
   </target>
 
-  <target name="adeploy">
-    <taskdef resource="com/sun/javafx/tools/ant/antlib.xml"
-             uri="javafx:com.sun.javafx.tools.ant"
-             classpath=".:${project.jdk.home}/lib/ant-javafx.jar"/>
+<!--  <path id="fxant">-->
+<!--    <filelist>-->
+<!--      <file name="${project.jdk.home}\lib\ant-javafx.jar"/>-->
+<!--      <file name="${project.jdk.home}\lib\jfxrt.jar"/>-->
+<!--    </filelist>-->
+<!--  </path>-->
 
-    <fx:application id="app"
-                    name="Client"
-                    mainClass="ClientApplication"/>
+<!--  <target name="adeploy">-->
+<!--    <taskdef resource="com/sun/javafx/tools/ant/antlib.xml"-->
+<!--             uri="javafx:com.sun.javafx.tools.ant"-->
+<!--             classpathref="fxant"/>-->
 
-    <fx:resources id="appRes">
-      <fx:fileset dir="client/src/main/resources"/>
-      <fx:fileset dir="client/src/main/java"/>
-    </fx:resources>
 
-    <fx:jar destfile="${chat.client.output.dir}/HelloWorld.jar">
-      <fx:application refid="app"/>
-      <fx:resources refid="appRes"/>
-      <fileset dir="client/build/classes"/>
-    </fx:jar>
-  </target>
+<!--    <fx:application id="app"-->
+<!--                    name="Client"-->
+<!--                    mainClass="ClientApplication"/>-->
+
+<!--    <fx:resources id="appRes">-->
+<!--      <fx:fileset dir="client/src/main/resources"/>-->
+<!--      <fx:fileset dir="client/src/main/java"/>-->
+<!--    </fx:resources>-->
+
+<!--    <fx:jar destfile="${chat.client.output.dir}/HelloWorld.jar">-->
+<!--      <fx:application refid="app"/>-->
+<!--      <fx:resources refid="appRes"/>-->
+<!--      <fileset dir="client/build/classes"/>-->
+<!--      <manifest>-->
+<!--        <attribute name="Class-Path" value="."/>-->
+<!--      </manifest>-->
+<!--    </fx:jar>-->
+<!--  </target>-->
 
   <target name="compile.module.chat.production" depends="register.custom.compilers" description="Compile module chat; production classes"/>
   
