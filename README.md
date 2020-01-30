@@ -18,8 +18,7 @@ ATChat project consists of three modules:
      - adds user to the map once joined chat and remove from once logged out
      - additionally implements connection poller in order to update current user's list every 1 second to avoid showing on UI users who 				 lost connection to the server
 
-**3. Client** - simple JavaFx GUI application containing three screens: login, loading placeholder and chat window. This allows users to join chat, send and receive messages and see other active users;\
-Structure:
+**3. Client** - simple JavaFx GUI application containing three screens: login, loading placeholder and chat window. This allows users to join chat, send and receive messages and see other active users;
 * EntryController and ChatboardController:
   - UI controllers, that extends BaseController class;
   - handle inputs provided by the user (like username, host address or message text) and pass them to the methods called on SceneCoordinator;
