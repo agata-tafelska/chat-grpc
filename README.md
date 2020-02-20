@@ -5,6 +5,9 @@ Simple chat application designed to communicate between users by sending text me
 Project was created for practicing Java coding skills and getting know the gRPC framework features.
 
 ## Structure
+![](images/atchat_diagram.png)
+
+
 ATChat project consists of three modules:
 
 **1. Common** - app's service definition protofile, which specifies chat's models and methods for communication between client and server; once these data structures are specified, protocol buffer compiler (protoc) is used to automatically generate data access classes in Java language
