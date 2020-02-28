@@ -26,7 +26,7 @@ ATChat project consists of three modules:
 
 | Main chat screen | Login screen | Loading screen |
 | --- | --- | --- |
-| a | b | c |
+| ![](images/chat_screenshot_2.png) | ![](images/chat_screenshot_1.png) | ![](images/chat_screenshot_3.png) |
 
 ### Requirements
 * Gradle 5.2.1
