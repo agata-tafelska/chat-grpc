@@ -14,15 +14,20 @@ public class FileChatStorage implements ChatStorage {
     private static final String STORAGE_DIRECTORY_PATH = System.getProperty("user.home") + File.separator + "Documents" + File.separator + "ATChat";
     private static final String CHAT_HISTORY_FILENAME = "atchat_history.csv";
     private static final String CHAT_HISTORY_FILENAME_PATH = STORAGE_DIRECTORY_PATH + File.separator + CHAT_HISTORY_FILENAME;
-
+    private static final String USERS_STORAGE_FILENAME = "users.csv";
+    private static final String USERS_STORAGE_FILENAME_PATH = STORAGE_DIRECTORY_PATH + File.separator + USERS_STORAGE_FILENAME;
 
     private List<Message> messages;
     private File chatHistoryFile;
 
+    private List<User> users;
+    private File usersStorageFile;
+
     public FileChatStorage() throws Exception {
         initializeDirectories();
-        initializeFile();
+        initializeFiles();
         messages = getMessagesFromFile();
+        users = getUsersFromFile();
     }
 
     private void initializeDirectories() throws IOException {
@@ -38,7 +43,7 @@ public class FileChatStorage implements ChatStorage {
         }
     }
 
-    private void initializeFile() throws IOException {
+    private void initializeFiles() throws IOException {
         Logger.print("Initializing chat history file");
         chatHistoryFile = new File(CHAT_HISTORY_FILENAME_PATH);
         if (!chatHistoryFile.exists()) {
@@ -47,6 +52,16 @@ public class FileChatStorage implements ChatStorage {
 
             if (!fileCreated) {
                 throw new IOException("Unable to create chat history file.");
+            }
+        }
+        Logger.print("Initializing users storage file");
+        usersStorageFile = new File(USERS_STORAGE_FILENAME_PATH);
+        if (!usersStorageFile.exists()) {
+            boolean fileCreated = usersStorageFile.createNewFile();
+            Logger.print("Users storage file not found. File created: " + fileCreated);
+
+            if (!fileCreated) {
+                throw new IOException("Unable to create users storage file.");
             }
         }
     }
@@ -98,6 +113,51 @@ public class FileChatStorage implements ChatStorage {
             writer.close();
         } catch (IOException exception) {
             Logger.print("Unable to save message to file.");
+            exception.printStackTrace();
+        }
+    }
+
+    private List<User> getUsersFromFile() throws IOException {
+        Logger.print("Loading users from file");
+        Reader reader = new FileReader(usersStorageFile);
+        CSVParser csvParser = CSVFormat.DEFAULT.parse(reader);
+        List<CSVRecord> records = csvParser.getRecords();
+        List<User> users = new ArrayList<>();
+        for (CSVRecord record : records) {
+            User user = User.newBuilder()
+                    .setId(record.get(0))
+                    .setName(record.get(1))
+                    .setPassword(record.get(2))
+                    .build();
+            users.add(user);
+        }
+        return users;
+    }
+
+    @Override
+    public List<User> getUsers() {
+        return users;
+    }
+
+    @Override
+    public void addUser(User user) {
+        Logger.print("Add message called");
+        saveUserToFile(user);
+        users.add(user);
+    }
+
+    private void saveUserToFile(User user) {
+        try {
+            FileWriter writer = new FileWriter(usersStorageFile, true);
+            CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.withQuoteMode(QuoteMode.ALL));
+            csvPrinter.printRecord(
+                    user.getId(),
+                    user.getName(),
+                    user.getPassword()
+            );
+            writer.close();
+        } catch (IOException exception) {
+            Logger.print("Unable to save user to file.");
             exception.printStackTrace();
         }
     }
