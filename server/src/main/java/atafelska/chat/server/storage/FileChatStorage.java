@@ -74,9 +74,9 @@ public class FileChatStorage implements ChatStorage {
         List<Message> messages = new ArrayList<>();
         for (CSVRecord record : records) {
             Message message = Message.newBuilder()
-                    .setUser(User.newBuilder().setName(record.get(0)).build())
-                    .setText(record.get(1))
-                    .setTimestamp(Long.parseLong(record.get(2)))
+                    .setUser(User.newBuilder().setId(record.get(0)).setName(record.get(1)).setIsGuest(record.get(2).equals("true")).build())
+                    .setText(record.get(3))
+                    .setTimestamp(Long.parseLong(record.get(4)))
                     .build();
             messages.add(message);
         }
@@ -106,7 +106,9 @@ public class FileChatStorage implements ChatStorage {
             FileWriter writer = new FileWriter(chatHistoryFile, true);
             CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.withQuoteMode(QuoteMode.ALL));
             csvPrinter.printRecord(
+                    message.getUser().getId(),
                     message.getUser().getName(),
+                    message.getUser().getIsGuest(),
                     message.getText(),
                     message.getTimestamp()
             );
