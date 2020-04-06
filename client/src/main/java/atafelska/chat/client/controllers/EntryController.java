@@ -3,10 +3,15 @@ package atafelska.chat.client.controllers;
 import atafelska.chat.client.core.Logger;
 import atafelska.chat.client.utils.InputUtils;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 import java.util.Map;
 
@@ -23,16 +28,18 @@ public class EntryController extends BaseController {
     @FXML
     private TextField editTextUsername;
     @FXML
-    private Label incorrectUsernameError;
+    private PasswordField passwordField;
     @FXML
-    private Label incorrectHostError;
+    private Label accountCreatedLabel;
+    @FXML
+    private Label messageLabel;
 
     @Override
     public void onLoaded() {
         super.onLoaded();
         entryPane.setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.ENTER){
-                onJoinButtonClicked();
+                onSignInButtonClicked();
             }
         });
     }
@@ -43,13 +50,13 @@ public class EntryController extends BaseController {
         if (optionalParams == null) return;
 
         if (optionalParams.containsKey(OPTION_PARAM_USERNAME_ERROR)) {
-            incorrectUsernameError.setText(optionalParams.get(OPTION_PARAM_USERNAME_ERROR));
-            incorrectUsernameError.setVisible(true);
+            messageLabel.setText(optionalParams.get(OPTION_PARAM_USERNAME_ERROR));
+            messageLabel.setVisible(true);
         }
 
         if (optionalParams.containsKey(OPTION_PARAM_HOST_ERROR)) {
-            incorrectHostError.setText(optionalParams.get(OPTION_PARAM_HOST_ERROR));
-            incorrectHostError.setVisible(true);
+            messageLabel.setText(optionalParams.get(OPTION_PARAM_HOST_ERROR));
+            messageLabel.setVisible(true);
         }
 
         if (optionalParams.containsKey(OPTION_PARAM_HOST)) {
@@ -59,11 +66,17 @@ public class EntryController extends BaseController {
         if (optionalParams.containsKey(OPTION_PARAM_USERNAME)) {
             editTextUsername.setText(optionalParams.get(OPTION_PARAM_USERNAME));
         }
+
+        if (optionalParams.containsKey(OPTION_PARAM_ACCOUNT_CREATED)) {
+            accountCreatedLabel.setText(optionalParams.get(OPTION_PARAM_ACCOUNT_CREATED));
+            accountCreatedLabel.setVisible(true);
+        }
     }
 
-    public void onJoinButtonClicked() {
+    public void onSignInButtonClicked() {
         String host = editTextHost.getText();
         String username = editTextUsername.getText();
+        String password = passwordField.getText();
 
         if (!InputUtils.isValidHost(host)) {
             Logger.print("Invalid host entered: " + host + ", returning");
@@ -71,23 +84,20 @@ public class EntryController extends BaseController {
             return;
         }
 
-        if (!InputUtils.isValidUserName(username)) {
-            Logger.print("Invalid username entered: " + username + ", returning");
-            showInvalidUsernameError();
-            return;
-        }
-
         Logger.print("Selected host: " + host + " and username: " + username);
-        sceneCoordinator.joinChat(host, username);
+        sceneCoordinator.joinChat(host, username, password, false);
     }
 
-    public void showInvalidHostError() {
-        incorrectHostError.setText(INCORRECT_HOST_MESSAGE);
-        incorrectHostError.setVisible(true);
+    public void onCreateAccountClicked() {
+        sceneCoordinator.showRegister();
     }
 
-    public void showInvalidUsernameError() {
-        incorrectUsernameError.setText(INCORRECT_USERNAME_MESSAGE);
-        incorrectUsernameError.setVisible(true);
+    public void onJoinAsGuestClicked() {
+        sceneCoordinator.showJoinAsGuest();
+    }
+
+    private void showInvalidHostError() {
+        messageLabel.setText(INCORRECT_HOST_MESSAGE);
+        messageLabel.setVisible(true);
     }
 }

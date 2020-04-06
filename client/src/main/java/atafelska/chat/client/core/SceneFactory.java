@@ -13,6 +13,8 @@ public class SceneFactory {
 
     public enum SceneType {
         ENTRY,
+        REGISTER,
+        JOINASGUEST,
         CHATBOARD,
         LOADING
     }
@@ -31,6 +33,12 @@ public class SceneFactory {
         switch (type) {
             case ENTRY:
                 sceneResource = "entry.fxml";
+                break;
+            case REGISTER:
+                sceneResource = "register.fxml";
+                break;
+            case JOINASGUEST:
+                sceneResource = "joinAsGuest.fxml";
                 break;
             case CHATBOARD:
                 sceneResource = "chatboard.fxml";

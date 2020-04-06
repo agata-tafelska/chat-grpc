@@ -1,30 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="entryPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="atafelska.chat.client.controllers.EntryController">
+<AnchorPane fx:id="entryPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="atafelska.chat.client.controllers.EntryController">
    <children>
-      <VBox layoutX="222.0" layoutY="314.0" prefHeight="140.0" prefWidth="581.0">
+      <VBox layoutX="298.0" layoutY="265.0" prefHeight="140.0" prefWidth="450.0">
          <children>
-            <TextField fx:id="editTextHost" promptText="Host" styleClass="text.field" stylesheets="@style.css" />
-            <Label fx:id="incorrectHostError" prefHeight="30.0" prefWidth="582.0" text="Label" textFill="#f50000" visible="false" />
-            <TextField fx:id="editTextUsername" promptText="Username" styleClass="text.field" stylesheets="@style.css" />
-            <Label fx:id="incorrectUsernameError" prefHeight="44.0" prefWidth="581.0" text="Label" textFill="#f50000" visible="false" />
+            <Label fx:id="accountCreatedLabel" prefHeight="44.0" prefWidth="581.0" style="-fx-padding: 5;" text="Label" textFill="#1aab0a" visible="false" />
+            <TextField fx:id="editTextHost" prefHeight="31.0" prefWidth="558.0" promptText="Host" styleClass="text.field" stylesheets="@style.css">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin></TextField>
+            <TextField fx:id="editTextUsername" promptText="Username" styleClass="text.field" stylesheets="@style.css">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="30.0" />
+               </VBox.margin></TextField>
+            <PasswordField fx:id="passwordField" promptText="Password">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="30.0" />
+               </VBox.margin>
+            </PasswordField>
+            <Label fx:id="messageLabel" prefHeight="44.0" prefWidth="581.0" style="-fx-padding: 5;" text="Label" textFill="#f50000" visible="false" wrapText="true">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <font>
+                  <Font size="14.0" />
+               </font></Label>
          </children>
       </VBox>
-      <Button fx:id="buttonJoin" layoutX="459.0" layoutY="441.0" mnemonicParsing="false" onAction="#onJoinButtonClicked" prefHeight="38.0" prefWidth="108.0" text="Join chat">
-         <font>
-            <Font size="17.0" />
-         </font>
-      </Button>
-      <ImageView fx:id="logo" fitHeight="215.0" fitWidth="233.0" layoutX="405.0" layoutY="99.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="logo" fitHeight="149.0" fitWidth="264.0" layoutX="398.0" layoutY="97.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@ATChatLogo.png" />
          </image>
       </ImageView>
+      <Pane layoutX="326.0" layoutY="556.0" prefHeight="50.0" prefWidth="394.0">
+         <children>
+            <Label layoutY="17.0" text="No account yet?">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Hyperlink fx:id="createAccountLink" layoutX="131.0" layoutY="13.0" onAction="#onCreateAccountClicked" text="Create one here">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Hyperlink>
+            <Label layoutX="270.0" layoutY="17.0" text="or">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Hyperlink fx:id="joinAsGuestLink" layoutX="287.0" layoutY="13.0" onAction="#onJoinAsGuestClicked" text="join as guest">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Hyperlink>
+         </children>
+      </Pane>
+      <Button fx:id="buttonSignIn" layoutX="298.0" layoutY="517.0" mnemonicParsing="false" onAction="#onSignInButtonClicked" prefHeight="38.0" prefWidth="450.0" style="-fx-background-color: #1976d2; -fx-font-weight: bold; -fx-font-size: 18;" text="Sign in" textFill="WHITE">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

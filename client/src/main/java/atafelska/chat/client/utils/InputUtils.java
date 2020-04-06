@@ -17,6 +17,12 @@ public class InputUtils {
         return USERNAME_PATTERN.matcher(username).matches();
     }
 
+    public static boolean isValidPassword(String password) {
+        final String PASSWORD_REGEX = ".{8,30}";
+        final Pattern PASSWORD_PATTERN = Pattern.compile(PASSWORD_REGEX);
+        return PASSWORD_PATTERN.matcher(password).matches();
+    }
+
     public static boolean isMessageValid(String text) {
         return !text.isEmpty();
     }

@@ -25,6 +25,10 @@ public class ChatService {
         asyncStub.getChat(request, responseObserver);
     }
 
+    public void register(User request, StreamObserver<User> responseObserver) {
+        asyncStub.register(request, responseObserver);
+    }
+
     public void unsubscribe(User request, StreamObserver<User> responseObserver) {
         asyncStub.unsubscribe(request, responseObserver);
     }

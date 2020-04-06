@@ -4,6 +4,7 @@ import atafelska.chat.Chat;
 import atafelska.chat.CurrentUsers;
 import atafelska.chat.Message;
 import atafelska.chat.User;
+import atafelska.chat.client.TextConstants;
 import atafelska.chat.client.data.MessageObservable;
 import atafelska.chat.client.data.UsersObservable;
 import atafelska.chat.client.net.ChatService;
@@ -22,8 +23,10 @@ import static atafelska.chat.client.TextConstants.*;
 public class SceneCoordinator {
     public static final String OPTION_PARAM_HOST_ERROR = "host_error_message";
     public static final String OPTION_PARAM_USERNAME_ERROR = "username_error_message";
+    public static final String OPTION_PARAM_USERNAME_EXISTS_ERROR = "username_exists_error_message";
     public static final String OPTION_PARAM_HOST = "host";
     public static final String OPTION_PARAM_USERNAME = "username";
+    public static final String OPTION_PARAM_ACCOUNT_CREATED = "account_created";
     private SceneConfiguration defaultSceneConfiguration = new SceneConfiguration(1024, 768);
 
     private Stage stage;
@@ -65,10 +68,16 @@ public class SceneCoordinator {
         stage.show();
     }
 
-    public void joinChat(String host, String username) {
+    public void joinChat(String host, String username, String password, boolean isGuest) {
         showLoading();
         chatService = new ChatService(host);
-        currentUser = User.newBuilder().setName(username).build();
+        if (isGuest) {
+            currentUser = User.newBuilder().setName(username).setPassword(password).setIsGuest(isGuest).build();
+            Logger.print("Current user: " + currentUser);
+        } else {
+            currentUser = User.newBuilder().setName(username).setPassword(password).setIsGuest(isGuest).build();
+            Logger.print("Current user: " + currentUser);
+        }
         chatService.getChat(currentUser, new StreamObserver<Chat>() {
             @Override
             public void onNext(Chat value) {
@@ -76,6 +85,8 @@ public class SceneCoordinator {
                 messagesObservable.setMessages(new ArrayList<>(value.getMessagesList()));
                 usersObservable.updateUsers(value.getUserList());
                 showChat();
+
+                currentUser = value.getCurrentUser();
 
                 chatService.observeUsers(currentUser, usersStreamObserver);
                 chatService.observeMessages(currentUser, messageStreamObserver);
@@ -91,8 +102,8 @@ public class SceneCoordinator {
                         case UNAVAILABLE:
                             showError(ERROR_SERVICE_UNAVAILABLE, null);
                             return;
-                        case ALREADY_EXISTS:
-                            showError(null, ERROR_DUPLICATED_USER);
+                        case UNAUTHENTICATED:
+                            showError(null, ERROR_UNAUTHENTICATED);
                             return;
                     }
                 }
@@ -102,6 +113,44 @@ public class SceneCoordinator {
             @Override
             public void onCompleted() {
                 // Do nothing
+            }
+        });
+    }
+
+    public void registerUser(String host, String username, String password) {
+        showLoading();
+        chatService = new ChatService(host);
+        User user = User.newBuilder().setName(username).setPassword(password).build();
+        chatService.register(user, new StreamObserver<User>() {
+            @Override
+            public void onNext(User value) {
+                Map<String, String> params = new HashMap<>();
+                params.put(OPTION_PARAM_ACCOUNT_CREATED, ACCOUNT_CREATED);
+                Platform.runLater(() -> {
+                    stage.setScene(SceneFactory.getScene(SceneFactory.SceneType.ENTRY, defaultSceneConfiguration, SceneCoordinator.this, params));
+                });
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+                if (throwable instanceof StatusRuntimeException) {
+                    StatusRuntimeException exception = (StatusRuntimeException) throwable;
+                    switch (exception.getStatus().getCode()) {
+                        case ALREADY_EXISTS:
+                            Map<String, String> params = new HashMap<>();
+                            params.put(OPTION_PARAM_USERNAME_EXISTS_ERROR, ERROR_DUPLICATED_USER);
+                            Platform.runLater(() -> {
+                                stage.setScene(SceneFactory.getScene(SceneFactory.SceneType.REGISTER, defaultSceneConfiguration, SceneCoordinator.this, params));
+                            });
+                            return;
+                    }
+                }
+                showError(null, ERROR_UNKNOWN);
+            }
+
+            @Override
+            public void onCompleted() {
+
             }
         });
     }
@@ -166,10 +215,24 @@ public class SceneCoordinator {
         showEntry();
     }
 
-    private void showEntry() {
+    public void showEntry() {
         Platform.runLater(() -> {
             Logger.print("");
             stage.setScene(SceneFactory.getScene(SceneFactory.SceneType.ENTRY, defaultSceneConfiguration, this));
+        });
+    }
+
+    public void showRegister() {
+        Platform.runLater(() -> {
+            Logger.print("");
+            stage.setScene(SceneFactory.getScene(SceneFactory.SceneType.REGISTER, defaultSceneConfiguration, this));
+        });
+    }
+
+    public void showJoinAsGuest() {
+        Platform.runLater(() -> {
+            Logger.print("");
+            stage.setScene(SceneFactory.getScene(SceneFactory.SceneType.JOINASGUEST, defaultSceneConfiguration, this));
         });
     }
 

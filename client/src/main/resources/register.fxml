@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="registerPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="atafelska.chat.client.controllers.RegisterController">
+   <children>
+      <VBox layoutX="287.0" layoutY="260.0" prefHeight="296.0" prefWidth="450.0">
+         <children>
+            <TextField fx:id="editTextHost" prefHeight="31.0" prefWidth="558.0" promptText="Host" styleClass="text.field" stylesheets="@style.css">
+               <font>
+                  <Font size="18.0" />
+               </font></TextField>
+            <TextField fx:id="editTextUsername" promptText="Username" styleClass="text.field" stylesheets="@style.css">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="30.0" />
+               </VBox.margin></TextField>
+            <PasswordField fx:id="passwordField" promptText="Password">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="30.0" />
+               </VBox.margin>
+            </PasswordField>
+            <PasswordField fx:id="confirmPasswordField" promptText="Confirm password">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="30.0" />
+               </VBox.margin>
+            </PasswordField>
+            <Label fx:id="messageLabel" prefHeight="46.0" prefWidth="450.0" style="-fx-padding: 5;" text="Label" textFill="#f50000" visible="false">
+               <font>
+                  <Font size="14.0" />
+               </font></Label>
+         </children>
+      </VBox>
+      <ImageView fx:id="logo" fitHeight="149.0" fitWidth="264.0" layoutX="398.0" layoutY="75.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@ATChatLogo.png" />
+         </image>
+      </ImageView>
+      <Pane layoutX="392.0" layoutY="595.0" prefHeight="59.0" prefWidth="240.0">
+         <children>
+            <Label layoutY="17.0" text="Already have account?">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Hyperlink fx:id="signInLink" layoutX="178.0" layoutY="13.0" onAction="#onSignInLinkClicked" text="Sign in">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Hyperlink>
+         </children>
+      </Pane>
+      <Button fx:id="buttonRegister" layoutX="287.0" layoutY="556.0" mnemonicParsing="false" onAction="#onRegisterButtonClicked" prefHeight="38.0" prefWidth="450.0" style="-fx-background-color: #1976d2; -fx-font-weight: bold; -fx-font-size: 18;" text="Register" textFill="WHITE">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>
