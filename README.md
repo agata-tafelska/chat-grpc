@@ -28,10 +28,11 @@ ATChat project consists of three modules:
 
 | Main chat screen | Login screen |
 | --- | --- |
-| ![](images/chat_screen.png) | ![](images/login_screen.png) |
+| ![](images/chat_screen.PNG) | ![](images/login_screen.PNG) |
+
 | Register screen | Join as guest screen |
 | --- | --- |
-| ![](images/register_screen.png) | ![](images/joinasguest_screen.png) |
+| ![](images/register_screen.PNG) | ![](images/joinasguest_screen.PNG) |
 
 ### Requirements
 * Gradle 5.2.1
