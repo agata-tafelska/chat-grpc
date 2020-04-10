@@ -16,7 +16,9 @@ ATChat project consists of three modules:
    
 **3. Client** - containing simple JavaFx GUI application with three screens: 
 * main chat screen which allows users to send and receive messages as well as see other active users in real time
-* login - allows users to join different chat servers (only one at a time)
+* login - allows registered on selected server users to join chat
+* register - allows to create account for selected chat server
+* join as guest - allows to join chat as a guest
 * loading placeholder
 
 ![](images/atchat_diagram.png)
@@ -24,9 +26,12 @@ ATChat project consists of three modules:
 
 ## Client app
 
-| Main chat screen | Login screen | Loading screen |
-| --- | --- | --- |
-| ![](images/chat_screenshot_2.png) | ![](images/chat_screenshot_1.png) | ![](images/chat_screenshot_3.png) |
+| Main chat screen | Login screen |
+| --- | --- |
+| ![](images/chat_screen.png) | ![](images/login_screen.png) |
+| Register screen | Join as guest screen |
+| --- | --- |
+| ![](images/register_screen.png) | ![](images/joinasguest_screen.png) |
 
 ### Requirements
 * Gradle 5.2.1
@@ -41,7 +46,7 @@ gradlew client:run
 ``` 
 
 ### Architecture
-* EntryController and ChatboardController:
+* EntryController, RegisterController, JoinAsGuestController and ChatboardController:
   - UI controllers, that extends BaseController class;
   - handle inputs provided by the user (like username, host address or message text) and pass them to the methods called on SceneCoordinator;
   - user can see new messages immediately and follow current users list thanks to observers held by ChatboardController, which, once notified, update UI with latest changes;
@@ -56,9 +61,10 @@ gradlew client:run
 ### Requirements
 * Gradle 5.2.1
 * JDK 8
+### Install
+[Server version 1.0](https://github.com/agata-tafelska/chat-grpc/releases/download/1.0-server/server-1.0-SNAPSHOT.zip) direkt download
 ### Building and running
-Server application is not distributed yet, in order to run project building from sources is necessary.
-How to run:
+In order to build and run the project from sources:
 1. Clone the project
 2. Run
 ```
